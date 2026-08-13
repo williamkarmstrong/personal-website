@@ -1,0 +1,63 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
+import { PageShell } from "@/components/PageShell";
+import { publishedPosts } from "@/content/posts";
+
+export const metadata: Metadata = {
+  title: "Writing",
+  description: "Posts by William Armstrong.",
+};
+
+/** Writing index — F4. Newest first. */
+export default function Page() {
+  const posts = publishedPosts();
+
+  return (
+    <PageShell>
+      <PageHeader
+        label="Section"
+        title="Writing"
+        descriptor="Notes on things I have built and what they turned out to cost."
+        meta={[{ label: "Count", value: String(posts.length) }]}
+      />
+
+      {posts.length === 0 ? (
+        <p className="measure text-text-secondary">Nothing published yet.</p>
+      ) : (
+        <ul className="grid gap-4">
+          {posts.map((post) => (
+            <li key={post.slug}>
+              <Link
+                href={`/writing/${post.slug}`}
+                className="card card-interactive group block p-6 no-underline hover:-translate-y-px hover:border-border-strong hover:shadow-[var(--shadow-md)] md:p-8"
+              >
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <time
+                    dateTime={post.date}
+                    className="font-mono text-micro text-text-faint"
+                  >
+                    {post.date}
+                  </time>
+                  {post.draft && (
+                    <span className="rounded-[var(--radius-sm)] bg-surface-subtle px-2 py-0.5 font-mono text-micro text-text-secondary">
+                      Draft
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="mt-2 text-h3 font-medium text-text group-hover:text-accent">
+                  {post.title}
+                </h2>
+
+                <p className="measure mt-2 text-text-secondary">
+                  {post.summary}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </PageShell>
+  );
+}

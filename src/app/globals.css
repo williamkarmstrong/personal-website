@@ -1,0 +1,384 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   DESIGN TOKENS — v2, modern editorial
+
+   Authority: design.md. §2 colour, §3 typography, §4 layout, §6 motion/depth.
+   No colour, font, spacing, radius, or shadow value may appear in a component
+   unless it exists here first.
+
+   Dark mode ships (spec.md F7). The palette is defined once as semantic tokens
+   and swapped wholesale under [data-theme]; components reference the semantic
+   name only and never a raw colour.
+   ========================================================================= */
+
+/* `static` is required, not stylistic: Tailwind v4 tree-shakes theme variables
+   that no generated utility happens to reference, which would silently drop
+   tokens this file is meant to guarantee. */
+@theme static {
+  /* ---- Colour — design.md §2, LIGHT (default) ---- */
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f4f4f5;
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
+  --color-grid-line: #ececee;
+  --color-text: #18181b;
+  --color-text-secondary: #52525b;
+  --color-text-faint: #a1a1aa;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-subtle: #eff6ff;
+
+  /* ---- Typography — design.md §3 ----
+     Sans is the default: it is the interface. Serif is applied deliberately to
+     long-form prose only. Mono carries data. */
+  --font-display: var(--font-ibm-plex-sans), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo,
+    monospace;
+
+  /* Modular scale, 1.25 ratio on a 16px root. Headings run tight. */
+  --text-display: 3.05rem;
+  --text-display--line-height: 1.08;
+  --text-display--letter-spacing: -0.02em;
+  --text-h1: 2.44rem;
+  --text-h1--line-height: 1.12;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h2: 1.95rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: 1.56rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-body-lg: 1.25rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.4;
+
+  /* ---- Layout — design.md §4 ----
+     Spacing is Tailwind's default 4px-step scale; nothing off-scale. */
+  --container-column: 1100px;
+  --container-measure: 68ch;
+  --grid-step: 40px;
+
+  /* ---- Depth — design.md §6. Two elevation levels, neutral and soft. ---- */
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 3px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.04), 0 8px 20px rgb(0 0 0 / 0.08);
+
+  /* ---- Motion — design.md §6 ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 150ms;
+}
+
+/* ---- Dark theme — design.md §2 ----
+   Surfaces get lighter with elevation, never darker. Shadows are reduced to
+   near-nothing because in the dark, elevation is carried by surface lightness.
+
+   Applied both ways round so an explicit choice always wins:
+   system preference first, then the stored [data-theme] attribute. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #09090b;
+    --color-surface: #141416;
+    --color-surface-subtle: #1c1c1f;
+    --color-border: #27272a;
+    --color-border-strong: #3f3f46;
+    --color-grid-line: #18181b;
+    --color-text: #fafafa;
+    --color-text-secondary: #a1a1aa;
+    --color-text-faint: #71717a;
+    --color-accent: #60a5fa;
+    --color-accent-hover: #93c5fd;
+    --color-accent-subtle: #172554;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 16px rgb(0 0 0 / 0.4);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #09090b;
+  --color-surface: #141416;
+  --color-surface-subtle: #1c1c1f;
+  --color-border: #27272a;
+  --color-border-strong: #3f3f46;
+  --color-grid-line: #18181b;
+  --color-text: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-faint: #71717a;
+  --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
+  --color-accent-subtle: #172554;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 0.4);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    /* Sans is the default — the interface. Serif is opt-in, for reading. */
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  a {
+    color: var(--color-accent);
+    transition:
+      color var(--duration) var(--ease-out),
+      text-decoration-color var(--duration) var(--ease-out);
+  }
+
+  a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* Focus is first-class. Never `outline: none`. — §6 */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection {
+    background-color: var(--color-accent-subtle);
+    color: var(--color-text);
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+/* ---- Background grid — design.md §4 ----
+   Texture, not structure. A single 40px rule, barely perceptible, behind
+   everything. Cards occlude it so text never runs over a rule. */
+@utility grid-bg {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--color-grid-line) 0 1px,
+      transparent 1px var(--grid-step)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-grid-line) 0 1px,
+      transparent 1px var(--grid-step)
+    );
+}
+
+/* ---- Card — design.md §4/§6. The main structural device. ---- */
+@utility card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Interactive card: border strengthens and elevation lifts on hover. */
+@utility card-interactive {
+  transition:
+    border-color var(--duration) var(--ease-out),
+    box-shadow var(--duration) var(--ease-out),
+    transform var(--duration) var(--ease-out);
+}
+
+/* Uppercase tracked mono. The only uppercase on the site — §3. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-faint);
+}
+
+@utility measure {
+  max-width: var(--container-measure);
+}
+
+/* Wide content scrolls in its own container; the body never scrolls sideways */
+@utility scroll-x {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* ---- Prose (long-form reading) — design.md §3 ----
+   The one place serif is used. Typography plugin deliberately not used:
+   design.md is the authority on the scale. */
+@layer components {
+  .prose {
+    font-family: var(--font-serif);
+    max-width: var(--container-measure);
+    color: var(--color-text);
+  }
+
+  .prose > * + * {
+    margin-top: --spacing(6);
+  }
+
+  .prose h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin-top: --spacing(12);
+  }
+
+  .prose h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    margin-top: --spacing(8);
+  }
+
+  .prose a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: --spacing(6);
+  }
+
+  .prose ul {
+    list-style: disc;
+  }
+
+  .prose ol {
+    list-style: decimal;
+  }
+
+  .prose li + li {
+    margin-top: --spacing(2);
+  }
+
+  .prose li::marker {
+    color: var(--color-text-faint);
+  }
+
+  .prose blockquote {
+    border-left: 2px solid var(--color-border-strong);
+    padding-left: --spacing(6);
+    color: var(--color-text-secondary);
+  }
+
+  .prose pre {
+    background-color: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: --spacing(4);
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .prose pre code {
+    font-size: var(--text-small);
+  }
+}
+
+/* ---- Theme-conditional visibility ----
+   Used by the theme toggle's icons. Driven purely by the resolved theme in CSS
+   so the correct icon is painted server-side, with no flash before hydration
+   tells React which theme is active. */
+@layer components {
+  .dark-hidden {
+    display: block;
+  }
+
+  .light-hidden {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .dark-hidden {
+      display: none;
+    }
+
+    :root:not([data-theme="light"]) .light-hidden {
+      display: block;
+    }
+  }
+
+  :root[data-theme="dark"] .dark-hidden {
+    display: none;
+  }
+
+  :root[data-theme="dark"] .light-hidden {
+    display: block;
+  }
+
+  :root[data-theme="light"] .dark-hidden {
+    display: block;
+  }
+
+  :root[data-theme="light"] .light-hidden {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Print — spec.md N5 ---- */
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .grid-bg {
+    background-image: none;
+  }
+
+  .card {
+    box-shadow: none;
+    border-color: #ccc;
+  }
+
+  a {
+    color: #000;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+}

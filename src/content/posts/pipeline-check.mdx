@@ -1,0 +1,26 @@
+This post exists to exercise the MDX rendering path while the writing section
+has no real content. It is marked `draft: true` in `src/content/posts.ts`, so it
+is excluded from production builds entirely — it renders in development only.
+
+Delete it once the first real post ships.
+
+## Headings render
+
+Prose is set in the serif face at a capped measure, per `design.md` §3.
+
+Inline `code` runs at 0.9em against surrounding prose, because mono sets large
+on the x-height.
+
+```ts
+const speedup = (sequential: number, threaded: number) => sequential / threaded;
+```
+
+> Block quotes sit inside a ruled border rather than a coloured bar — this is a
+> printed document, not a chat log.
+
+1. Ordered lists
+2. Render in the prose measure
+3. And carry the standard spacing scale
+
+- As do unordered lists
+- With the same rhythm
