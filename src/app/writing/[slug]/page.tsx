@@ -29,7 +29,6 @@ export async function generateMetadata({
   };
 }
 
-/** Post — F4. Prose from the adjacent MDX file, metadata from the registry. */
 export default async function Page({
   params,
 }: {
@@ -52,10 +51,9 @@ export default async function Page({
         ]}
       />
 
-      {/* Long-form reading sits on a card, in the serif face — design.md §3/§4.
-          `prose` carries the 68ch measure, so it goes on the text and not on
-          the card; combined, the card itself shrank to the measure and sat
-          visibly narrower than the page header above it. */}
+      {/* `prose` carries the 68ch measure, so it goes on the inner div and not
+          on the card — on the card, the card itself shrinks to the measure and
+          sits visibly narrower than the page header above it. */}
       <article className="card p-6 md:p-12">
         <div className="prose">
           <Content />

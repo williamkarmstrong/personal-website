@@ -1,38 +1,68 @@
 @import "tailwindcss";
 
-/* ============================================================================
-   DESIGN TOKENS — v2, modern editorial
+/* Design tokens. Authority is design.md; no colour, font, spacing, radius or
+   shadow value may appear in a component unless it exists here first.
 
-   Authority: design.md. §2 colour, §3 typography, §4 layout, §6 motion/depth.
-   No colour, font, spacing, radius, or shadow value may appear in a component
-   unless it exists here first.
-
-   Dark mode ships (spec.md F7). The palette is defined once as semantic tokens
-   and swapped wholesale under [data-theme]; components reference the semantic
-   name only and never a raw colour.
-   ========================================================================= */
+   Every ink/wash and ink/ground pair below is verified at >= 4.5:1 in both
+   themes. Changing one means re-checking it. */
 
 /* `static` is required, not stylistic: Tailwind v4 tree-shakes theme variables
    that no generated utility happens to reference, which would silently drop
    tokens this file is meant to guarantee. */
 @theme static {
-  /* ---- Colour — design.md §2, LIGHT (default) ---- */
-  --color-bg: #fafafa;
-  --color-surface: #ffffff;
-  --color-surface-subtle: #f4f4f5;
-  --color-border: #e4e4e7;
-  --color-border-strong: #d4d4d8;
-  --color-grid-line: #ececee;
-  --color-text: #18181b;
-  --color-text-secondary: #52525b;
-  --color-text-faint: #a1a1aa;
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-accent-subtle: #eff6ff;
+  /* Ground, light. `text` and `accent` are sampled from the site mark
+     (public/wa_header.png). Re-exporting the monogram in other colours
+     invalidates them — re-sample and re-verify the ratios if that happens. */
+  --color-bg: #f7f4ee;
+  --color-surface: #fffdf8;
+  --color-surface-subtle: #efebe1;
+  --color-border: #e0d9cb;
+  --color-border-strong: #c7beac;
+  /* Cool against the warm ground on purpose, and pinned to roughly `border`
+     strength (~1.4:1 against `bg`) so the ruled page reads at the same weight
+     as the card hairlines sitting on it. Quieter than that and it vanishes. */
+  --color-rule-line: #c8d4e8;
+  --color-text: #201e1d;
+  --color-text-secondary: #57514a;
+  /* Dark enough to clear 4.5:1 on bg, surface AND surface-subtle. The obvious
+     lighter grey sat at 3.12:1 — metadata is body text and takes the body-text
+     minimum, not the 3:1 large-text one. — design.md §2.4 */
+  --color-text-faint: #6f6859;
 
-  /* ---- Typography — design.md §3 ----
-     Sans is the default: it is the interface. Serif is applied deliberately to
-     long-form prose only. Mono carries data. */
+  /* Signals, light. `-ink` is the hue; `-wash` is a chip-sized tint of it,
+     never used on an area larger than a chip or a table header cell.
+     design.md §2.3 fixes what each hue means.
+
+     Washes are tinted toward the paper, not toward white — a white-based tint
+     on a cream ground reads as a hole punched in the page. */
+  --color-ink-blue: #006786;
+  --color-wash-blue: #e3f0f6;
+  --color-ink-teal: #0f766e;
+  --color-wash-teal: #e4f3f0;
+  /* Darker than the obvious green: on a warm wash the lighter value fell to
+     4.42:1, under the floor. */
+  --color-ink-green: #136b33;
+  --color-wash-green: #e7f4e9;
+  --color-ink-amber: #9a5407;
+  --color-wash-amber: #faf0df;
+  --color-ink-rose: #b41539;
+  --color-wash-rose: #fbeaec;
+  --color-ink-violet: #6231c4;
+  --color-wash-violet: #efe9fb;
+  /* Warm, so the "uncategorised" hue reads as unmarked paper rather than as a
+     cool grey imported from another palette. */
+  --color-ink-slate: #55504a;
+  --color-wash-slate: #ede9e1;
+
+  /* `accent` and `ink-blue` are the same colour by definition but stay
+     separate tokens: they answer different questions ("interactive?" vs "what
+     category?"), and a change to one must not silently move the other. */
+  --color-accent: #006786;
+  --color-accent-hover: #00485f;
+  --color-accent-subtle: #e3f0f6;
+
+  /* Sans is the default and sets headings too; serif is opt-in, for long-form
+     prose only; mono carries data. */
   --font-display: var(--font-ibm-plex-sans), ui-sans-serif, system-ui,
     sans-serif;
   --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
@@ -61,45 +91,63 @@
   --text-micro: 0.75rem;
   --text-micro--line-height: 1.4;
 
-  /* ---- Layout — design.md §4 ----
-     Spacing is Tailwind's default 4px-step scale; nothing off-scale. */
+  /* Spacing is Tailwind's default 4px-step scale; nothing off-scale. */
   --container-column: 1100px;
   --container-measure: 68ch;
-  --grid-step: 40px;
+  /* Paired with --color-rule-line's strength: at 40px the rule crossed roughly
+     every line of body text on the background. Strengthen one, widen the other. */
+  --grid-step: 48px;
 
-  /* ---- Depth — design.md §6. Two elevation levels, neutral and soft. ---- */
+  /* Two elevation levels, neutral and soft. */
   --radius-sm: 6px;
   --radius: 8px;
   --radius-lg: 12px;
+  --radius-full: 9999px;
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 3px rgb(0 0 0 / 0.06);
   --shadow-md: 0 2px 4px rgb(0 0 0 / 0.04), 0 8px 20px rgb(0 0 0 / 0.08);
 
-  /* ---- Motion — design.md §6 ---- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration: 150ms;
 }
 
-/* ---- Dark theme — design.md §2 ----
-   Surfaces get lighter with elevation, never darker. Shadows are reduced to
-   near-nothing because in the dark, elevation is carried by surface lightness.
+/* Dark theme. Applied both ways round so an explicit choice always wins:
+   system preference first, then the stored [data-theme] attribute.
 
-   Applied both ways round so an explicit choice always wins:
-   system preference first, then the stored [data-theme] attribute. */
+   The two blocks below are identical by requirement and there is no way to
+   share them — custom properties must land on `:root` itself, so CSS nesting
+   and Tailwind's `@custom-variant` (which appends `&` as a descendant) both
+   fail, and Tailwind v4 has no `@mixin`. EDIT BOTH. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-bg: #09090b;
-    --color-surface: #141416;
-    --color-surface-subtle: #1c1c1f;
-    --color-border: #27272a;
-    --color-border-strong: #3f3f46;
-    --color-grid-line: #18181b;
-    --color-text: #fafafa;
-    --color-text-secondary: #a1a1aa;
-    --color-text-faint: #71717a;
-    --color-accent: #60a5fa;
-    --color-accent-hover: #93c5fd;
-    --color-accent-subtle: #172554;
+    --color-bg: #0c0b0a;
+    --color-surface: #171512;
+    --color-surface-subtle: #1f1c18;
+    --color-border: #2e2a25;
+    --color-border-strong: #48423a;
+    --color-rule-line: #282d3c;
+    --color-text: #f3f2f2;
+    --color-text-secondary: #a9a29a;
+    --color-text-faint: #8c857a;
+
+    --color-ink-blue: #99e0ff;
+    --color-wash-blue: #0a2c3a;
+    --color-ink-teal: #2dd4bf;
+    --color-wash-teal: #062e2c;
+    --color-ink-green: #4ade80;
+    --color-wash-green: #0a2e17;
+    --color-ink-amber: #fbbf24;
+    --color-wash-amber: #3a1e03;
+    --color-ink-rose: #fb7185;
+    --color-wash-rose: #4c0519;
+    --color-ink-violet: #a78bfa;
+    --color-wash-violet: #2a1065;
+    --color-ink-slate: #a8a096;
+    --color-wash-slate: #262220;
+
+    --color-accent: #99e0ff;
+    --color-accent-hover: #c8eeff;
+    --color-accent-subtle: #0a2c3a;
 
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 16px rgb(0 0 0 / 0.4);
@@ -107,18 +155,34 @@
 }
 
 :root[data-theme="dark"] {
-  --color-bg: #09090b;
-  --color-surface: #141416;
-  --color-surface-subtle: #1c1c1f;
-  --color-border: #27272a;
-  --color-border-strong: #3f3f46;
-  --color-grid-line: #18181b;
-  --color-text: #fafafa;
-  --color-text-secondary: #a1a1aa;
-  --color-text-faint: #71717a;
-  --color-accent: #60a5fa;
-  --color-accent-hover: #93c5fd;
-  --color-accent-subtle: #172554;
+  --color-bg: #0c0b0a;
+  --color-surface: #171512;
+  --color-surface-subtle: #1f1c18;
+  --color-border: #2e2a25;
+  --color-border-strong: #48423a;
+  --color-rule-line: #282d3c;
+  --color-text: #f3f2f2;
+  --color-text-secondary: #a9a29a;
+  --color-text-faint: #8c857a;
+
+  --color-ink-blue: #99e0ff;
+  --color-wash-blue: #0a2c3a;
+  --color-ink-teal: #2dd4bf;
+  --color-wash-teal: #062e2c;
+  --color-ink-green: #4ade80;
+  --color-wash-green: #0a2e17;
+  --color-ink-amber: #fbbf24;
+  --color-wash-amber: #3a1e03;
+  --color-ink-rose: #fb7185;
+  --color-wash-rose: #4c0519;
+  --color-ink-violet: #a78bfa;
+  --color-wash-violet: #2a1065;
+  --color-ink-slate: #a8a096;
+  --color-wash-slate: #262220;
+
+  --color-accent: #99e0ff;
+  --color-accent-hover: #c8eeff;
+  --color-accent-subtle: #0a2c3a;
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 16px rgb(0 0 0 / 0.4);
@@ -133,7 +197,6 @@
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    /* Sans is the default — the interface. Serif is opt-in, for reading. */
     font-family: var(--font-display);
     font-size: var(--text-body);
     line-height: 1.6;
@@ -160,7 +223,6 @@
     color: var(--color-accent-hover);
   }
 
-  /* Focus is first-class. Never `outline: none`. — §6 */
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
@@ -178,24 +240,21 @@
   }
 }
 
-/* ---- Background grid — design.md §4 ----
-   Texture, not structure. A single 40px rule, barely perceptible, behind
-   everything. Cards occlude it so text never runs over a rule. */
-@utility grid-bg {
+/* Texture, not structure. Cards occlude it so text never runs over a rule. */
+@utility ruled-bg {
   background-image:
     repeating-linear-gradient(
       to right,
-      var(--color-grid-line) 0 1px,
+      var(--color-rule-line) 0 1px,
       transparent 1px var(--grid-step)
     ),
     repeating-linear-gradient(
       to bottom,
-      var(--color-grid-line) 0 1px,
+      var(--color-rule-line) 0 1px,
       transparent 1px var(--grid-step)
     );
 }
 
-/* ---- Card — design.md §4/§6. The main structural device. ---- */
 @utility card {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -203,7 +262,6 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Interactive card: border strengthens and elevation lifts on hover. */
 @utility card-interactive {
   transition:
     border-color var(--duration) var(--ease-out),
@@ -211,13 +269,97 @@
     transform var(--duration) var(--ease-out);
 }
 
-/* Uppercase tracked mono. The only uppercase on the site — §3. */
+/* The only uppercase on the site. */
 @utility label {
   font-family: var(--font-mono);
   font-size: var(--text-micro);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-text-faint);
+  color: var(--color-accent);
+
+  /* `inline-block`, not a flex child: `.label` is applied to <th> cells in the
+     skills table, and giving those a flex display would drop them out of table
+     layout entirely. `currentColor` lets the one override that exists — the
+     rose pending-figure label — recolour the rule by setting text colour. */
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 0.75em;
+    margin-right: 0.5em;
+    vertical-align: -0.04em;
+    background-color: currentColor;
+  }
+}
+
+/* The hue arrives through --chip-ink/--chip-wash from a `hue-*` class, so a
+   component never names a colour. The border is the hue mixed to 25% rather
+   than a third token per hue — 7 hues x 2 themes to maintain, for a value
+   that is always a function of one that already exists. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: --spacing(1.5);
+  border: 1px solid color-mix(in oklab, var(--chip-ink) 25%, transparent);
+  border-radius: var(--radius-sm);
+  background-color: var(--chip-wash);
+  padding: --spacing(0.5) --spacing(2);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  color: var(--chip-ink);
+  /* Fallback if a `hue-*` class is missing: slate is the "unmapped" signal,
+     so a miswired chip looks uncategorised rather than unstyled. */
+  --chip-ink: var(--color-ink-slate);
+  --chip-wash: var(--color-wash-slate);
+}
+
+/* Status chips take a dot; stack chips do not — a technology is not a state. */
+@utility chip-dot {
+  &::before {
+    content: "";
+    flex: none;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: var(--radius-full);
+    background-color: var(--chip-ink);
+  }
+}
+
+/* A `hue-*` class only ever sets the two chip variables. */
+@utility hue-blue {
+  --chip-ink: var(--color-ink-blue);
+  --chip-wash: var(--color-wash-blue);
+}
+
+@utility hue-teal {
+  --chip-ink: var(--color-ink-teal);
+  --chip-wash: var(--color-wash-teal);
+}
+
+@utility hue-green {
+  --chip-ink: var(--color-ink-green);
+  --chip-wash: var(--color-wash-green);
+}
+
+@utility hue-amber {
+  --chip-ink: var(--color-ink-amber);
+  --chip-wash: var(--color-wash-amber);
+}
+
+@utility hue-rose {
+  --chip-ink: var(--color-ink-rose);
+  --chip-wash: var(--color-wash-rose);
+}
+
+@utility hue-violet {
+  --chip-ink: var(--color-ink-violet);
+  --chip-wash: var(--color-wash-violet);
+}
+
+@utility hue-slate {
+  --chip-ink: var(--color-ink-slate);
+  --chip-wash: var(--color-wash-slate);
 }
 
 @utility measure {
@@ -230,9 +372,7 @@
   max-width: 100%;
 }
 
-/* ---- Prose (long-form reading) — design.md §3 ----
-   The one place serif is used. Typography plugin deliberately not used:
-   design.md is the authority on the scale. */
+/* Typography plugin deliberately not used: design.md owns the scale. */
 @layer components {
   .prose {
     font-family: var(--font-serif);
@@ -305,9 +445,8 @@
   }
 }
 
-/* ---- Theme-conditional visibility ----
-   Used by the theme toggle's icons. Driven purely by the resolved theme in CSS
-   so the correct icon is painted server-side, with no flash before hydration
+/* Driven purely by the resolved theme in CSS, so the theme toggle's icons and
+   the header site mark are painted server-side with no flash before hydration
    tells React which theme is active. */
 @layer components {
   .dark-hidden {
@@ -356,14 +495,13 @@
   }
 }
 
-/* ---- Print — spec.md N5 ---- */
 @media print {
   body {
     background: #fff;
     color: #000;
   }
 
-  .grid-bg {
+  .ruled-bg {
     background-image: none;
   }
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
@@ -5,7 +6,6 @@ import { partNumber, projects } from "@/content/projects";
 import { publishedPosts } from "@/content/posts";
 import { site } from "@/content/site";
 
-/** Landing — F2. A short introduction and a way in, not an About page. */
 export default function Page() {
   const recentProjects = projects.slice(0, 3);
   const recentPosts = publishedPosts().slice(0, 3);
@@ -14,8 +14,19 @@ export default function Page() {
     <PageShell>
       <PageHeader
         title={site.name}
-        descriptor={site.descriptor}
+        intro={site.intro}
         meta={[{ label: "Based in", value: site.location }]}
+        portrait={
+          <Image
+            src="/headshot.jpg"
+            alt="William Armstrong, outdoors in front of a leafy hedge."
+            width={1400}
+            height={1050}
+            sizes="(min-width: 1024px) 16rem, 10rem"
+            priority
+            className="aspect-square w-40 rounded-(--radius-lg) border border-border object-cover lg:w-64"
+          />
+        }
       />
 
       <section className="mt-8" aria-labelledby="selected-work">
@@ -33,10 +44,10 @@ export default function Page() {
             <li key={project.slug}>
               <Link
                 href={`/projects/${project.slug}`}
-                className="card card-interactive group block p-6 no-underline hover:-translate-y-px hover:border-border-strong hover:shadow-[var(--shadow-md)]"
+                className="card card-interactive group block p-6 no-underline hover:-translate-y-px hover:border-border-strong hover:shadow-(--shadow-md)"
               >
                 <div className="flex flex-wrap items-baseline gap-x-3">
-                  <span className="font-mono text-micro text-text-faint">
+                  <span className="font-mono text-micro text-accent">
                     {partNumber(i)}
                   </span>
                   <h3 className="text-h3 font-medium text-text group-hover:text-accent">
@@ -74,7 +85,7 @@ export default function Page() {
               <li key={post.slug}>
                 <Link
                   href={`/writing/${post.slug}`}
-                  className="card card-interactive group block p-6 no-underline hover:-translate-y-px hover:border-border-strong hover:shadow-[var(--shadow-md)]"
+                  className="card card-interactive group block p-6 no-underline hover:-translate-y-px hover:border-border-strong hover:shadow-(--shadow-md)"
                 >
                   <time
                     dateTime={post.date}

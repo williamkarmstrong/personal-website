@@ -8,8 +8,11 @@ const brandIcons = {
 } as const;
 
 export function SiteFooter() {
+  // Full-bleed band, not a card — design.md §Cards and surfaces. The tint goes
+  // on <footer> so it reaches the viewport edges; the inner wrapper keeps the
+  // content on the column.
   return (
-    <footer className="mt-24 border-t border-border">
+    <footer className="mt-24 border-t border-border bg-surface-subtle">
       <div className="mx-auto flex max-w-column flex-wrap items-center justify-between gap-x-8 gap-y-3 px-4 py-8 md:px-6">
         <p className="text-small text-text-faint">
           {site.name} — {site.location}

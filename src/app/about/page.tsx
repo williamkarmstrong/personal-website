@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { SkillsTable } from "@/components/SkillsTable";
@@ -34,19 +35,17 @@ const competitions = [
   "CFA Institute AI Investment Challenge — 3rd in the UK, 28 teams",
   "J.P. Morgan Sprint Code for Good Hackathon — winner",
   "University of Glasgow guitarguitar Hackathon — 3rd place",
-  "Business Bloom Programme — £1,000 grant",
 ];
 
 /**
- * About — F5.
- *
  * Publication constraints enforced here (spec.md §5, me.md §Off-limits):
  *   - The J.P. Morgan internship is named. No project, no system, no metrics.
- *   - No placing is claimed for Business Bloom; the grant is stated, since it
- *     is not in dispute (me.md §Conflicts #1).
+ *   - Business Bloom is absent entirely (cut 2026-08-17, spec.md §5 Excluded).
+ *     Its placing is disputed in me.md §Conflicts #1, so it cannot be stated
+ *     fully; reinstating it needs the conflict settled and a spec change.
  *   - No contact email until spec.md Q8 is resolved.
  *   - No weak grades.
- *   - The skills table carries no proficiency rating (design.md §5).
+ *   - The skills table carries no proficiency rating.
  */
 export default function Page() {
   return (
@@ -61,23 +60,41 @@ export default function Page() {
       <div className="grid gap-12">
         <section>
           <h2 className="label">Background</h2>
-          <div className="card mt-4 p-6 md:p-10">
-            <p className="prose measure">
-              I am in my final year of a BEng in Electronics and Software
-              Engineering at the University of Glasgow, on track for first class
-              honours. The degree sits deliberately across the hardware and
-              software boundary, and most of what interests me is how those
-              layers behave where they meet — real-time constraints,
-              concurrency, and the point where an abstraction stops being free.
-            </p>
-            <p className="prose measure mt-6">
-              The work I care about tends to be the work that shipped. A phone
-              repair business at 17 that had to turn a profit. A racing line
-              that had to hold up in a live control loop. An earnings-call model
-              that had to survive being judged against 28 other teams. Things
-              with a consequence attached behave differently from things
-              without one.
-            </p>
+          {/* Not a figure: no number, no caption, and per spec.md §5 the alt
+              text describes the room, not the work. Height is never forced to
+              match the prose — object-cover would crop a wide group shot into a
+              banner, which design.md §5 forbids for this photograph.
+
+              The prose column drops `measure`: inside a sized grid track the
+              68ch cap is unreachable anyway, and leaving it on made the text
+              column refuse to fill its share of the row. */}
+          <div className="card mt-4 grid gap-8 p-6 md:p-10 lg:grid-cols-[1fr_26rem] lg:items-center lg:gap-10">
+            <div>
+              <p className="prose">
+                I am a final-year Electronics and Software Engineering student
+                at the University of Glasgow, and spent the summer of 2026 as a
+                software engineering intern at J.P. Morgan. My degree sits
+                deliberately at the hardware and software boundary, covering
+                systems programming, real-time computer systems, operating
+                systems and networked systems, with a focus on C++ and Python.
+              </p>
+              <p className="prose mt-6">
+                I am particularly interested in how these layers interact to
+                build systems that are efficient, low-latency and reliable,
+                where performance is a fundamental design constraint. Outside
+                coursework that has meant a portfolio tracker and EarningsIQ.
+              </p>
+            </div>
+
+            <Image
+              src="/workpic.jpg"
+              alt="A group of people seated around a table in a modern open-plan office."
+              width={2000}
+              height={1333}
+              sizes="(min-width: 1024px) 26rem, 92vw"
+              priority
+              className="h-auto w-full rounded-[var(--radius-lg)] border border-border"
+            />
           </div>
         </section>
 
@@ -99,17 +116,6 @@ export default function Page() {
               </li>
             ))}
           </ul>
-        </section>
-
-        <section>
-          <h2 className="label">Education</h2>
-          <div className="card mt-4 p-6 md:p-10">
-            <p className="prose measure">
-              BEng Electronics &amp; Software Engineering, University of
-              Glasgow, 2023–2027. On track for first class honours, and on the
-              Engineering Excellence List in every year of the degree so far.
-            </p>
-          </div>
         </section>
 
         <section>

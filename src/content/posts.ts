@@ -1,15 +1,14 @@
 import type { ComponentType } from "react";
 
 /**
- * Post metadata lives here (typed, listable); prose lives in the adjacent MDX
- * file. Registering posts explicitly rather than globbing keeps the index
+ * Registering posts explicitly rather than globbing keeps the index
  * type-checked and makes an unpublished draft impossible to leak by accident.
  */
 export interface PostMeta {
   slug: string;
   title: string;
   summary: string;
-  /** ISO date. URLs never change once published — spec.md N7. */
+  /** ISO date. URLs never change once published. */
   date: string;
   draft?: boolean;
 }

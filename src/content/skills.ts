@@ -1,18 +1,13 @@
 /**
- * Skills — design.md §5, rendered as a datasheet-style table.
+ * Source: me.md §Skills.
  *
- * **No proficiency rating.** This began as a "characteristics" block rating
- * each skill Deep/Proficient/Working, was cut, and was reinstated without the
- * ratings. A rating is a claim that invites argument; "where this was used" is
- * evidence and needs no defending. Adding a rating column back is a design.md
- * change, not an implementation detail.
- *
- * Source: me.md §Skills. Grouped so the table can be skimmed by area.
+ * **No proficiency rating**, deliberately: a rating is a claim that invites
+ * argument, "where this was used" is evidence. Adding a rating column back is
+ * a design.md change, not an implementation detail.
  */
 
 export interface Skill {
   name: string;
-  /** The "conditions" column: where this was actually used. */
   usedIn: string;
 }
 

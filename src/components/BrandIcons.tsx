@@ -1,15 +1,7 @@
 /**
- * Brand marks for external destinations — design.md §5 "Icons".
- *
- * Inline SVG, no icon library. Each mark is the official glyph, unmodified in
- * shape, sized to the type beside it (`1em`) and filled with `currentColor` so
- * it inherits the link's colour, hover state, and focus ring. They are
- * decorative: the visible text label carries the accessible name, so both are
- * `aria-hidden` and removed from the tab order.
- *
- * Each keeps its own source viewBox rather than being rescaled by hand — the
- * marks are not to be altered in shape, and `1em` sizing makes the underlying
- * coordinate space irrelevant.
+ * Official glyphs, unmodified in shape — each keeps its own source viewBox
+ * rather than being rescaled by hand. `aria-hidden`: the visible text label
+ * carries the accessible name.
  */
 
 type IconProps = {

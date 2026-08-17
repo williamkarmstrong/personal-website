@@ -5,11 +5,8 @@ import { useEffect, useState } from "react";
 type Theme = "light" | "dark";
 
 /**
- * Theme toggle — design.md §5, spec.md F7.
- *
- * System preference is followed until the user makes an explicit choice, which
- * is then stored and wins. The stored choice is applied by the inline script in
- * layout.tsx before first paint; this component only reflects and changes it.
+ * The stored choice is applied by the inline script in layout.tsx before first
+ * paint; this component only reflects and changes it.
  */
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme | null>(null);
@@ -33,7 +30,6 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      // aria-label rather than visible text: the icon is the whole control.
       aria-label={
         theme === null
           ? "Toggle theme"
@@ -41,8 +37,8 @@ export function ThemeToggle() {
       }
       className="card-interactive flex size-9 items-center justify-center rounded-[var(--radius)] border border-border bg-surface text-text-secondary hover:border-border-strong hover:text-text"
     >
-      {/* Both icons are rendered and swapped with CSS so the control does not
-          shift or flash before the theme is known on the client. */}
+      {/* Both rendered and swapped in CSS so the control does not flash before
+          the theme is known on the client. */}
       <svg
         aria-hidden="true"
         viewBox="0 0 24 24"

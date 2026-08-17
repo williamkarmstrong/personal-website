@@ -1,12 +1,8 @@
 import { skillGroups } from "@/content/skills";
 
-/**
- * Skills table — design.md §5.
- *
- * Real <table> markup with real headers; group headings are spanning row
- * headers so the grouping reaches a screen reader rather than being purely
- * visual. No proficiency column — see src/content/skills.ts.
- */
+/** Group headings are spanning row headers so the grouping reaches a screen
+ *  reader rather than being purely visual. No proficiency column — see
+ *  src/content/skills.ts. */
 export function SkillsTable() {
   return (
     <div className="scroll-x card mt-4">

@@ -8,8 +8,8 @@
  *   - Neurish carries no link or repo, ever. Rights are the client's.
  *   - The concurrent systems work carries no source code. Discussion,
  *     architecture, and benchmark figures only.
- *   - Business Bloom placing is disputed (me.md §Conflicts #1), so no placing
- *     is claimed anywhere. The grant is a fact and may be stated.
+ *   - Business Bloom appears nowhere on the site (cut 2026-08-17, spec.md §5
+ *     Excluded). Its placing is disputed in me.md §Conflicts #1.
  *
  * Ordered by significance, not date (spec.md §5).
  */
@@ -27,23 +27,35 @@ export interface ProjectLink {
 }
 
 export interface ProjectSection {
-  /** Uppercase mono label, datasheet-style. Keep to one or two words. */
+  /** Rendered as a section label. Keep to one or two words. */
   label: string;
   body: string[];
 }
 
+export interface ProjectFigure {
+  src: string;
+  /**
+   * Required, and may not claim more than the picture proves — a bench
+   * photograph evidences a bench, not a successful measurement (spec.md §5).
+   */
+  caption: string;
+  alt: string;
+  /** Intrinsic pixel size. next/image needs it to reserve space before load. */
+  width: number;
+  height: number;
+}
+
 export interface Project {
   slug: string;
-  /** Datasheet part number, e.g. "PRJ-01". Assigned by order. */
   title: string;
   oneLiner: string;
   status: ProjectStatus;
   period: string;
   stack: string[];
-  /** Stated plainly. Overclaiming a team project is the fastest way to lose trust. */
-  role: string;
   links: ProjectLink[];
   sections: ProjectSection[];
+  /** Numbered sequentially in array order. */
+  figures?: ProjectFigure[];
   /** Set when assets are known to be missing, so the page can say so honestly. */
   pendingAssets?: string;
 }
@@ -64,7 +76,6 @@ export const projects: Project[] = [
       "Librosa",
       "Streamlit",
     ],
-    role: "Sole software engineer on a four-person team. Designed the system architecture and wrote most of the implementation; my teammates covered the economics and financial analysis.",
     links: [
       {
         href: "https://rpc.cfainstitute.org/blogs/enterprising-investor/2026/can-ai-decode-what-management-says-in-earnings-call",
@@ -80,23 +91,39 @@ export const projects: Project[] = [
       {
         label: "Premise",
         body: [
-          "Transcript-only analysis discards signal. The linguistic tone of an earnings call has been shown to predict abnormal returns and post-earnings announcement drift, and none of that survives being reduced to text.",
+          "I built this model on the premise that transcript-only analysis discards signal. The linguistic tone of an earnings call has been shown to predict abnormal returns and post-earnings announcement drift, and none of that survives being reduced to text.",
           "Language is easy to optimise. Tone is not. Management can rehearse the words; the delivery is harder to control.",
         ],
       },
       {
         label: "Approach",
         body: [
-          "The system runs FinBERT sentiment analysis over the transcript, then layers vocal stress features extracted with Wav2Vec2 and Librosa over the same timeline, producing a management confidence score.",
-          "The output of interest is the divergence between the two: where the words and the delivery disagree. On top of that the tool tracks narrative shifts across quarters and compares a company against its peers.",
+          "The system layers FinBERT sentiment over vocal stress features extracted with Wav2Vec2 and Librosa, scoring management confidence against the same timeline as the transcript.",
+          "What it produces is a tone-to-text divergence score: the places where the words and the delivery disagree. Alongside that it tracks narrative shifts across quarters and compares a company against its peers.",
+        ],
+      },
+      {
+        label: "Role",
+        body: [
+          "I was the sole software engineer on a four-person team. I designed the system architecture and wrote most of the implementation; my teammates covered the economics and financial analysis.",
         ],
       },
       {
         label: "Result",
         body: [
-          "Tone-to-text divergence scores correlated with cumulative abnormal returns across the companies tested.",
-          "Third in the UK in the CFA Institute AI Investment Challenge, against 28 university teams. The work was published by the CFA Society.",
+          "The divergence scores correlated with cumulative abnormal returns across the companies tested, and the tool was deployed as a live application.",
+          "Presented nationally against 28 university teams: 3rd in the UK in the CFA Institute AI Investment Challenge, with the work published by the CFA Society.",
         ],
+      },
+    ],
+    figures: [
+      {
+        src: "/earningsiq.jpg",
+        alt: "A laptop displaying the EarningsIQ dashboard for Google's Q1 2024 earnings call, showing key takeaways and summary metrics.",
+        caption:
+          "The deployed tool analysing Alphabet's Q1 2024 call — sentiment, tone-to-text divergence, and Q&A stress side by side.",
+        width: 1500,
+        height: 2000,
       },
     ],
   },
@@ -105,35 +132,44 @@ export const projects: Project[] = [
     slug: "neurish",
     title: "Neurish",
     oneLiner:
-      "A social platform for neurodivergent users, built with a real client and handed over for release.",
+      "A full-stack mobile social platform for neurodivergent users, built with a real client and handed over for release.",
     status: "Handed over",
     period: "2025–2026",
     stack: ["Capacitor", "React", "TypeScript", "Supabase", "MongoDB"],
-    role: "Team lead. Owned architectural decisions and worked directly with the client, driving iteration from user flows and design through to shipped functionality.",
     links: [],
     sections: [
       {
         label: "Brief",
         body: [
-          "A mobile social platform designed for neurodivergent users, where accessibility, privacy, and inclusive interaction patterns were requirements rather than refinements.",
-          "This was a real client engagement rather than a university exercise. Part of the work was translating what the client described into features an engineering team could build and argue about.",
+          "A neurodivergent-focused social platform, where accessibility, privacy, and inclusive interaction patterns were requirements rather than refinements.",
+          "I worked directly with a client to translate user requirements into features, driving iteration from user flows and design through to shipped functionality. That is the part a university exercise does not teach: the client describes an outcome, and someone has to turn it into something an engineering team can build and argue about.",
         ],
       },
       {
         label: "Role",
         body: [
-          "I led the team: architecture, technical direction, and keeping delivery moving against a fixed academic deadline. Delivered as a Level 3 Team Project and graded A4.",
+          "I led the team building Neurish, owning the architectural decisions and keeping delivery moving against a fixed academic deadline, within a collaborative engineering team. Delivered as a Level 3 Team Project and graded A4.",
         ],
       },
       {
         label: "Status",
         body: [
-          "The application was handed over to the client on completion, and the rights went with it. There is no public repository and no source to show. A store release may follow, at the client's discretion.",
+          "The application was handed over successfully on completion, to be released on the app store, and the rights went with it. There is no public repository and no source to show.",
         ],
       },
     ],
+    figures: [
+      {
+        src: "/neurish.jpg",
+        alt: "Three team members standing in front of a large screen showing the application running in an iOS simulator.",
+        caption:
+          "The team at handover, with the app running in the iOS simulator behind them.",
+        width: 1124,
+        height: 2000,
+      },
+    ],
     pendingAssets:
-      "Screenshots and team photos exist but have not been added to the repository yet.",
+      "Interface screenshots. The rights sit with the client, so what can be shown here is limited to the team's own record of the work.",
   },
 
   {
@@ -150,20 +186,19 @@ export const projects: Project[] = [
       "Mutexes",
       "Condition variables",
     ],
-    role: "Individual work.",
     links: [],
     sections: [
       {
         label: "Multithreaded strace analyser",
         body: [
-          "A sequential syscall-log parser, rebuilt as a concurrent pipeline. A producer thread streams trace lines into a bounded work queue backed by a condition variable; each worker holds a thread-local statistics map, merged once at join rather than contended on throughout.",
-          "The interesting part was not making it concurrent but finding where concurrency stops paying. Benchmarking sequential against multithreaded runs across increasing thread counts locates the point where speed-up flattens against parsing cost and queue synchronisation overhead — past which more threads buy nothing.",
+          "I rebuilt a sequential syscall-log parser as a concurrent pipeline, using a producer thread streaming trace lines into a bounded, condition-variable-backed work queue. Each worker was given a thread-local statistics map, merged once at join rather than contended on throughout.",
+          "The interesting part was not making it concurrent but finding where concurrency stops paying. Benchmarking sequential against multithreaded runs across increasing thread counts locates where speed-up flattens against parsing and queue-synchronisation overhead — past which more threads buy nothing.",
         ],
       },
       {
         label: "Concurrent disk device driver",
         body: [
-          "Application threads synchronised against a disk device through two bounded producer-consumer queues, drained by dedicated read and write worker threads, with voucher-based asynchronous completion so callers are not blocked waiting on the device.",
+          "Application threads synchronised against a disk device through two bounded producer-consumer queues, drained by dedicated read and write worker threads with voucher-based asynchronous completion, so callers are not blocked waiting on the device.",
         ],
       },
       {
@@ -178,47 +213,13 @@ export const projects: Project[] = [
   },
 
   {
-    slug: "ugracing-path-planning",
-    title: "Autonomous Racing Line",
-    oneLiner:
-      "Path planning for a driverless Formula Student car, generating a racing line from detected track cones.",
-    status: "Archived",
-    period: "Sep 2024 – Sep 2025",
-    stack: ["Python", "ROS2", "Real-time perception", "Odometry"],
-    role: "Software engineer on the path planning team, within the UGRacing Formula Student team.",
-    links: [],
-    sections: [
-      {
-        label: "Problem",
-        body: [
-          "An autonomous race car competing at Silverstone has to find its own way around a circuit it has never seen, marked only by cones, while moving.",
-        ],
-      },
-      {
-        label: "Approach",
-        body: [
-          "The racing line is generated from the midpoints of a Delaunay triangulation over detected cone positions — the triangulation gives a principled way to find the drivable corridor between left and right cone sets without hand-tuned heuristics.",
-          "I owned normalisation and persistence of the completed line as a global racing line. After the first exploratory lap the car reuses the stored path rather than re-planning from perception on every subsequent lap, which removes per-lap perception noise from the control loop.",
-        ],
-      },
-      {
-        label: "Constraints",
-        body: [
-          "Everything ran against real-time perception and odometry data inside a live control loop, so update rate and stability mattered as much as correctness. A planner that produces a better line too slowly is not a better planner.",
-        ],
-      },
-    ],
-  },
-
-  {
     slug: "portfolio-tracker",
     title: "Portfolio Tracker",
     oneLiner:
-      "A full-stack asset management application tracking equities, funds, and cryptocurrency against live market data.",
+      "A self-directed full-stack asset management application covering equities, funds, and cryptocurrency, built on live market data.",
     status: "Archived",
     period: "2024",
     stack: ["Node.js", "Express", "MongoDB", "EJS", "Chart.js"],
-    role: "Solo, self-directed.",
     links: [
       {
         href: "https://github.com/williamkarmstrong/investment-tracker",
@@ -229,7 +230,7 @@ export const projects: Project[] = [
       {
         label: "What it is",
         body: [
-          "A portfolio tracker covering equities, funds, and cryptocurrency, ingesting market data over REST and charting positions over time.",
+          "A self-directed full-stack portfolio application covering stocks, funds, and cryptocurrencies, handling time-series storage and continuous position valuation, and using the Alpha Vantage API to ingest real-time market data over REST.",
           "Built unprompted, before any of the finance-adjacent competition work — it is where the interest in financial systems actually started rather than something assembled to demonstrate it.",
         ],
       },
@@ -244,15 +245,24 @@ export const projects: Project[] = [
     status: "Archived",
     period: "Feb 2021 – Mar 2022",
     stack: ["Hardware repair", "Refurbishment"],
-    role: "Founder.",
     links: [],
     sections: [
       {
         label: "What it was",
         body: [
-          "A phone repair and refurbishment business, funded by a £600 startup loan through the Peter Jones Tycoon Enterprise Competition. I repaid the loan and ran it at a profit.",
+          "I founded and ran a mobile phone repair and refurbishment business at 17, funded by a £600 startup loan through the Peter Jones Tycoon Enterprise Competition, repaying the loan and running it profitably.",
+          "The work itself was diagnosing and repairing hardware and software faults, which is where the practical electronics and troubleshooting came from.",
           "It is the odd one out on this page — not software. It is here because it is the earliest evidence of the same instinct: take something apart, work out why it is broken, and ship the fix to someone who is waiting on it.",
         ],
+      },
+    ],
+    figures: [
+      {
+        src: "/upfix-branding.jpg",
+        alt: "A refurbished iPhone resting on a scattered pile of UpFix business cards.",
+        caption: "UpFix branding and a refurbished handset, 2021.",
+        width: 1500,
+        height: 2000,
       },
     ],
   },
@@ -265,4 +275,71 @@ export function getProject(slug: string): Project | undefined {
 /** Datasheet part number, derived from significance order. */
 export function partNumber(index: number): string {
   return `PRJ-${String(index + 1).padStart(2, "0")}`;
+}
+
+/**
+ * Signal hues — design.md §2.3 fixes what each one means. A hue may not be
+ * borrowed for a new purpose: if something needs colour and no existing meaning
+ * fits, §2.3 gets a new row before any code changes.
+ */
+export type Hue =
+  | "blue"
+  | "teal"
+  | "green"
+  | "amber"
+  | "rose"
+  | "violet"
+  | "slate";
+
+/** Exhaustive by type: adding a ProjectStatus without a hue will not compile. */
+export const statusHue: Record<ProjectStatus, Hue> = {
+  Deployed: "green",
+  Shipped: "blue",
+  "Handed over": "violet",
+  Coursework: "amber",
+  Archived: "slate",
+};
+
+/**
+ * Stack entry → domain hue, keyed by what the thing *is*. Unlisted entries fall
+ * back to slate, which is a prompt to add a line here — not a resting state.
+ */
+export const stackHue: Record<string, Hue> = {
+  // Languages
+  Python: "blue",
+  TypeScript: "blue",
+  C: "blue",
+  "C++17": "blue",
+
+  // Web & app
+  React: "teal",
+  Capacitor: "teal",
+  Streamlit: "teal",
+  "Node.js": "teal",
+  Express: "teal",
+  EJS: "teal",
+  "Chart.js": "teal",
+
+  // Data & storage
+  Supabase: "green",
+  MongoDB: "green",
+
+  // Systems & concurrency
+  "POSIX threads": "amber",
+  Mutexes: "amber",
+  "Condition variables": "amber",
+
+  // ML & signal
+  "HuggingFace Transformers": "violet",
+  FinBERT: "violet",
+  Wav2Vec2: "violet",
+  Librosa: "violet",
+
+  // Hardware
+  "Hardware repair": "rose",
+  Refurbishment: "rose",
+};
+
+export function hueForStack(item: string): Hue {
+  return stackHue[item] ?? "slate";
 }

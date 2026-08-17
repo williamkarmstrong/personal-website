@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Chip } from "@/components/Chip";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { publishedPosts } from "@/content/posts";
@@ -9,7 +10,6 @@ export const metadata: Metadata = {
   description: "Posts by William Armstrong.",
 };
 
-/** Writing index — F4. Newest first. */
 export default function Page() {
   const posts = publishedPosts();
 
@@ -19,7 +19,6 @@ export default function Page() {
         label="Section"
         title="Writing"
         descriptor="Notes on things I have built and what they turned out to cost."
-        meta={[{ label: "Count", value: String(posts.length) }]}
       />
 
       {posts.length === 0 ? (
@@ -40,9 +39,9 @@ export default function Page() {
                     {post.date}
                   </time>
                   {post.draft && (
-                    <span className="rounded-[var(--radius-sm)] bg-surface-subtle px-2 py-0.5 font-mono text-micro text-text-secondary">
+                    <Chip hue="rose" dot>
                       Draft
-                    </span>
+                    </Chip>
                   )}
                 </div>
 
