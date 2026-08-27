@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { prose } from "@/lib/prose";
 
 /**
  * Registering posts explicitly rather than globbing keeps the index
@@ -17,8 +18,9 @@ export const posts: PostMeta[] = [
   {
     slug: "pipeline-check",
     title: "Pipeline check",
-    summary:
-      "Scaffold post used to exercise the MDX rendering path. Not published.",
+    summary: prose`
+      Scaffold post used to exercise the MDX rendering path. Not published.
+    `,
     date: "2026-08-12",
     draft: true,
   },

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Chip } from "@/components/Chip";
+import { StatusMarker } from "@/components/StatusMarker";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { publishedPosts } from "@/content/posts";
@@ -39,9 +39,7 @@ export default function Page() {
                     {post.date}
                   </time>
                   {post.draft && (
-                    <Chip hue="rose" dot>
-                      Draft
-                    </Chip>
+                    <StatusMarker hue="rose">Draft</StatusMarker>
                   )}
                 </div>
 

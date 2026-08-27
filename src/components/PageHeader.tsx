@@ -46,7 +46,7 @@ export function PageHeader({
               {meta.map((m) => (
                 <div key={m.label} className="flex items-baseline gap-2">
                   <dt className="label">{m.label}</dt>
-                  <dd className="font-mono text-small text-text-secondary">
+                  <dd className="text-small text-text-secondary">
                     {m.value}
                   </dd>
                 </div>

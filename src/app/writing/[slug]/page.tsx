@@ -47,7 +47,10 @@ export default async function Page({
         title={post.title}
         descriptor={post.summary}
         meta={[
-          { label: post.draft ? "Drafted" : "Published", value: post.date },
+          {
+            label: post.draft ? "Drafted" : "Published",
+            value: <span className="font-mono">{post.date}</span>,
+          },
         ]}
       />
 

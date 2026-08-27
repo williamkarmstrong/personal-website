@@ -6,6 +6,8 @@
  * beyond the fact of the internship — which belongs on /about and nowhere else.
  */
 
+import { prose } from "@/lib/prose";
+
 export const site = {
   name: "William Armstrong",
 
@@ -15,12 +17,19 @@ export const site = {
    * search results truncate it. This is why the longer landing copy is a
    * separate string rather than an extension of this one.
    */
-  descriptor:
-    "Electronics and software engineering at the University of Glasgow, working across the boundary between the two.",
+  descriptor: prose`
+    Electronics and software engineering at the University of Glasgow, working across the boundary
+    between the two.
+  `,
 
   /** Landing title block only — spec.md §5. May not name J.P. Morgan. */
-  intro:
-    "I am in my final year of a BEng in Electronics and Software Engineering at the University of Glasgow — a degree that sits across the hardware and software boundary rather than on one side of it. What interests me is how those layers behave where they meet, and what it costs to build systems where performance is a constraint rather than an afterthought. The work collected here is the work that shipped.",
+  intro: prose`
+    I am in my final year of a BEng in Electronics and Software Engineering at the University of
+    Glasgow — a degree that sits across the hardware and software boundary rather than on one side
+    of it. What interests me is how those layers behave where they meet, and what it costs to build
+    systems where performance is a constraint rather than an afterthought. The work collected here
+    is the work that shipped.
+  `,
 
   location: "Glasgow, Scotland",
 

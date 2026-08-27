@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Chip } from "@/components/Chip";
+import { StackList } from "@/components/StackList";
+import { StatusMarker } from "@/components/StatusMarker";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import {
-  hueForStack,
   partNumber,
   projects,
   statusHue,
@@ -39,22 +39,19 @@ export default function Page() {
                 <h2 className="text-h3 font-medium text-text group-hover:text-accent">
                   {project.title}
                 </h2>
-                <Chip hue={statusHue[project.status]} dot>
+                <StatusMarker hue={statusHue[project.status]}>
                   {project.status}
-                </Chip>
+                </StatusMarker>
               </div>
 
               <p className="measure mt-3 text-text-secondary">
                 {project.oneLiner}
               </p>
 
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {project.stack.map((item) => (
-                  <li key={item}>
-                    <Chip hue={hueForStack(item)}>{item}</Chip>
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 className="label">Stack</h3>
+                <StackList items={project.stack} />
+              </div>
             </Link>
           </li>
         ))}

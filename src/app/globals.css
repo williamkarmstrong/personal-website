@@ -29,8 +29,10 @@
      minimum, not the 3:1 large-text one. — design.md §2.4 */
   --color-text-faint: #6f6859;
 
-  /* Signals, light. `-ink` is the hue; `-wash` is a chip-sized tint of it,
-     never used on an area larger than a chip or a table header cell.
+  /* Signals, light. `-ink` is the hue; `-wash` is a small tint of it, never
+     used on an area larger than a callout or a table header cell. Since v3.3
+     removed the chip fill, the only `-wash` consumer left is the
+     pending-figure callout (design.md §2.3).
      design.md §2.3 fixes what each hue means.
 
      Washes are tinted toward the paper, not toward white — a white-based tint
@@ -269,9 +271,11 @@
     transform var(--duration) var(--ease-out);
 }
 
-/* The only uppercase on the site. */
+/* The only uppercase on the site. Sans since v3.3: a section label is a word,
+   and mono is reserved for things that line up in a column (design.md §3). */
 @utility label {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-weight: 500;
   font-size: var(--text-micro);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -292,74 +296,90 @@
   }
 }
 
-/* The hue arrives through --chip-ink/--chip-wash from a `hue-*` class, so a
-   component never names a colour. The border is the hue mixed to 25% rather
-   than a third token per hue — 7 hues x 2 themes to maintain, for a value
-   that is always a function of one that already exists. */
-@utility chip {
+/* The hue arrives through --signal-ink from a `hue-*` class, so a component
+   never names a colour. design.md v3.3 removed the wash fill, the hue-at-25%
+   border and the radius: that combination is the stock component-library badge,
+   and on the index it outweighed the project title beside it. What is left is
+   the part that actually signals. */
+@utility status {
   display: inline-flex;
   align-items: center;
   gap: --spacing(1.5);
-  border: 1px solid color-mix(in oklab, var(--chip-ink) 25%, transparent);
-  border-radius: var(--radius-sm);
-  background-color: var(--chip-wash);
-  padding: --spacing(0.5) --spacing(2);
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  line-height: var(--text-micro--line-height);
-  color: var(--chip-ink);
-  /* Fallback if a `hue-*` class is missing: slate is the "unmapped" signal,
-     so a miswired chip looks uncategorised rather than unstyled. */
-  --chip-ink: var(--color-ink-slate);
-  --chip-wash: var(--color-wash-slate);
-}
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  font-weight: 500;
+  color: var(--signal-ink);
+  /* Fallback if a `hue-*` class is missing: slate is the "unmapped" signal, so
+     a miswired marker looks uncategorised rather than unstyled. */
+  --signal-ink: var(--color-ink-slate);
 
-/* Status chips take a dot; stack chips do not — a technology is not a state. */
-@utility chip-dot {
+  /* The dot is the whole device. It never appears without the word beside it
+     — design.md §2.4, never colour alone. */
   &::before {
     content: "";
     flex: none;
     width: 0.5em;
     height: 0.5em;
     border-radius: var(--radius-full);
-    background-color: var(--chip-ink);
+    background-color: var(--signal-ink);
   }
 }
 
-/* A `hue-*` class only ever sets the two chip variables. */
+/* Stack is a list read left to right, not a set of objects (design.md §5).
+   The separator takes the border colour so the entries read as content and the
+   slashes read as structure. */
+@utility stack-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: --spacing(2);
+  row-gap: --spacing(1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+
+  /* Flex items, so a wrap falls between entries and never inside one — a
+     technology name is a unit, and "HuggingFace Transformers" broken across
+     two lines reads as two entries. The separator trails its own entry rather
+     than leading the next, so a wrapped line never opens with a stray slash.
+     `column-gap` matches the separator's margin, keeping the slash centred. */
+  & > li:not(:last-child)::after {
+    content: "/";
+    margin-left: --spacing(2);
+    color: var(--color-border-strong);
+  }
+}
+
+/* A `hue-*` class only ever sets the one signal variable. The `-wash`
+   tokens remain in the palette (design.md §2.1 verifies the ramp as a set) but
+   have no consumer outside the pending-figure callout. */
 @utility hue-blue {
-  --chip-ink: var(--color-ink-blue);
-  --chip-wash: var(--color-wash-blue);
+  --signal-ink: var(--color-ink-blue);
 }
 
 @utility hue-teal {
-  --chip-ink: var(--color-ink-teal);
-  --chip-wash: var(--color-wash-teal);
+  --signal-ink: var(--color-ink-teal);
 }
 
 @utility hue-green {
-  --chip-ink: var(--color-ink-green);
-  --chip-wash: var(--color-wash-green);
+  --signal-ink: var(--color-ink-green);
 }
 
 @utility hue-amber {
-  --chip-ink: var(--color-ink-amber);
-  --chip-wash: var(--color-wash-amber);
+  --signal-ink: var(--color-ink-amber);
 }
 
 @utility hue-rose {
-  --chip-ink: var(--color-ink-rose);
-  --chip-wash: var(--color-wash-rose);
+  --signal-ink: var(--color-ink-rose);
 }
 
 @utility hue-violet {
-  --chip-ink: var(--color-ink-violet);
-  --chip-wash: var(--color-wash-violet);
+  --signal-ink: var(--color-ink-violet);
 }
 
 @utility hue-slate {
-  --chip-ink: var(--color-ink-slate);
-  --chip-wash: var(--color-wash-slate);
+  --signal-ink: var(--color-ink-slate);
 }
 
 @utility measure {

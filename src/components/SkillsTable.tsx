@@ -37,7 +37,7 @@ export function SkillsTable() {
               <tr key={skill.name} className="border-b border-border/60">
                 <th
                   scope="row"
-                  className="px-4 py-3 font-mono text-small font-normal whitespace-nowrap"
+                  className="px-4 py-3 text-small font-medium whitespace-nowrap"
                 >
                   {skill.name}
                 </th>

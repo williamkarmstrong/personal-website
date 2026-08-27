@@ -3,7 +3,7 @@ import type { Hue } from "@/content/projects";
 /**
  * Written out rather than built as `hue-${hue}`. Tailwind resolves utilities by
  * scanning source text for literal class names, so an interpolated one is never
- * generated and every chip would silently fall back to the slate default.
+ * generated and every marker would silently fall back to the slate default.
  */
 const HUE_CLASS: Record<Hue, string> = {
   blue: "hue-blue",
@@ -15,18 +15,19 @@ const HUE_CLASS: Record<Hue, string> = {
   slate: "hue-slate",
 };
 
-export function Chip({
+/**
+ * A dot and a word — design.md §5 Status markers. Status is the only
+ * categorical signal that still takes colour, because it is the only one that
+ * reads without a legend (§2.3).
+ */
+export function StatusMarker({
   hue,
-  dot = false,
   children,
 }: {
   hue: Hue;
-  dot?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <span className={`chip ${HUE_CLASS[hue]} ${dot ? "chip-dot" : ""}`}>
-      {children}
-    </span>
+    <span className={`status ${HUE_CLASS[hue]}`}>{children}</span>
   );
 }
